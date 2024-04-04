@@ -1,36 +1,35 @@
-import express from "express";
-import http from "http";
+import express, { Request, Response } from "express";
+import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import compression from "compression";
-import cors from "cors";
-import mongoose from "mongoose";
-import router from "./router";
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  users,
+  User,
+} from "./controllers/user.controller";
+dotenv.config();
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(
-  cors({
-    credentials: true,
-  })
-);
-
-app.use(compression());
-app.use(cookieParser());
 app.use(bodyParser.json());
-
-const server = http.createServer(app);
-const PORT = 5000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}...`);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hola");
+});
+app.get("/users", (req: Request, res: Response) => {
+  res.send(users);
 });
 
-const MONGO_URL = "mongodb+srv://antonio:antonio@cluster0.9ungab2.mongodb.net/"
-// "mongodb+srv://antonio:antonio@cluster0.9ungab2.mongodb.net/"
- 
+app.get("/users", getUsers);
+app.get("/users/:id", getUserById);
+app.post("/users", createUser);
+app.put("/users/:id", updateUser);
+app.delete("/users/:id", deleteUser);
 
-mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL)
-mongoose.connection.on('error',(error:Error) => console.log(error));
-
-
-app.use('/',router)
+app.listen(PORT, () => {
+  console.log(`Server running in port ${PORT}...`);
+});
