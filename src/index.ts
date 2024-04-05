@@ -1,7 +1,8 @@
 import express, { Request, Response, Router } from "express";
 import dotenv from "dotenv";
 import mongoose, { Schema } from "mongoose";
-import router from "./routes/alumnoRoutes";
+import routerCrud from "./routes/alumnoRoutes";
+import routerAuth from "./routes/authroutes";
 
 dotenv.config();
 
@@ -9,22 +10,6 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const DB_URL = process.env.DB_URL;
-
-// app.post("/alumnos", async (req: Request, res: Response) => {
-//   try {
-//     const { nombre, apellido, edad } = req.body;
-//     if (!nombre || !apellido || !edad) {
-//       return res
-//         .status(400)
-//         .json({ message: "Se requieren todos los datos del alumno" });
-//     }
-//     const alumno = await AlumnoModel.create({ nombre, apellido, edad });
-//     res.status(201).json(alumno);
-//   } catch (error) {
-//     console.error("Error creando el alumno", error);
-//     res.status(500).json({ error: "Error interno del servidor" });
-//   }
-// });
 
 async function connect() {
   try {
@@ -37,7 +22,10 @@ async function connect() {
 
 connect();
 //home
-app.use("/", router);
+app.use("/auth",routerAuth);
+
+app.use("/", routerCrud);
+// app.use("/", routerAuth);
 
 app.listen(PORT, () => {
   console.log(`Server running in the port ${PORT}...`);
