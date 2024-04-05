@@ -1,14 +1,15 @@
 import express from "express"
-import {getAllUsers,userById,postUser,EditUserById,deleteUserById} from "../controllers/alumnosControllers"
+import {getHome,getAllUsers,userById,postUser,EditUserById,deleteUserById} from "../controllers/alumnosControllers"
 
 
-const router = express.Router()
+const routerCrud = express.Router()
 
-router.get("/alumnos",getAllUsers)
-router.get("/alumnos/:id",userById)
-router.post("/alumnos",postUser)
-router.put("/alumnos/:id",EditUserById)
-router.delete("/alumnos/:id",deleteUserById)
+routerCrud.get("/",getHome)
+routerCrud.get("/alumnos",getAllUsers)
+routerCrud.get("/alumnos/:id",userById)
+routerCrud.post("/alumnos",postUser)
+routerCrud.put("/alumnos/:id",EditUserById)
+routerCrud.delete("/alumnos/:id",deleteUserById)
 
 
-export default router
+export default routerCrud
