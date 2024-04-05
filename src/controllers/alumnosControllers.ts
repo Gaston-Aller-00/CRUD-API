@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import AlumnoModel, { Alumno } from "../models/AlumnoModel";
 
+
+export const getHome = (req: Request, res: Response)=>{
+    res.send("Home")
+} 
+
+
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const alumnos = await AlumnoModel.find();
