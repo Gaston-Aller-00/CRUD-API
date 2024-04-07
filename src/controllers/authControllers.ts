@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/userModel";
+import validateEmail from "../utils/validateEmail";
+
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -10,6 +12,10 @@ export const registerUser = async (req: Request, res: Response) => {
     if (existingUser) {
       return res.status(400).json({ message: "User is already registered" });
     }
+    if(!validateEmail(email)){
+      return res.status(400).json({message:"Invalid Email"})
+    }
+    
     const hashingPassword = await bcrypt.hash(password, 10);
     const newUser = await UserModel.create({
       username,
@@ -26,6 +32,7 @@ export const registerUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 
 export const loginUser = async (req: Request, res: Response) => {
